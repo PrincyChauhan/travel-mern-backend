@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
+const { validationResult } = require("express-validator");
 const HttpError = require("../models/http-error");
 
 let DUMMY_PLACES = [
@@ -35,7 +36,7 @@ const getPlaceByUserId = (req, res, next) => {
     return p.creator === userId;
   });
 
-  if (!places || places.length===0) {
+  if (!places || places.length === 0) {
     return next(
       new HttpError("Could not find a place for provided UserId", 404)
     );
@@ -45,6 +46,11 @@ const getPlaceByUserId = (req, res, next) => {
 };
 
 const createPlace = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors);
+    throw new HttpError("Invalid Input passed, please checkdata");
+  }
   const { title, description, coordinates, address, creator } = req.body;
   const createdPlace = {
     id: uuidv4(),
@@ -76,7 +82,7 @@ const updatePlace = (req, res, next) => {
 const deletePlace = (req, res, next) => {
   const placeId = req.params.pid;
   DUMMY_PLACES = DUMMY_PLACES.find((p) => p.id !== placeId);
-  res.status(200).json({ message: 'Delete Place' });
+  res.status(200).json({ message: "Delete Place" });
 };
 module.exports = {
   getPlaceById,
