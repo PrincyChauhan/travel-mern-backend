@@ -24,7 +24,7 @@ const signup = (req, res, next) => {
   }
 
   const createdUser = {
-    id: uuid(),
+    id: uuidv4(),
     name, // name: name
     email,
     password,
