@@ -7,7 +7,10 @@ const HttpError = require("./models/http-error");
 
 const app = express();
 
+// Import Database connection
+const Database = require("./database/db");
 app.use(bodyParser.json());
+
 app.use("/api/places", placesRoutes);
 app.use("/api/users", usersRoutes);
 
